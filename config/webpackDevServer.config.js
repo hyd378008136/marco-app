@@ -5,9 +5,7 @@ const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const paths = require('./paths');
-const path = require('path');
 const fs = require('fs');
-const urlList = require('../mock/url');
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
@@ -89,19 +87,7 @@ module.exports = function(proxy, allowedHost) {
       disableDotRule: true,
     },
     public: allowedHost,
-    // proxy: {
-    //   '/fms-rest/*': {
-    //     target: 'http://saas.800jit.com',
-    //     changeOrigin: true,
-    //     bypass: function(req, res, proxyOptions) {
-    //       console.log(req,res,proxyOptions)
-    //     }
-    //   }
-    // },
-    proxy: [{
-      context: () => true,
-      target: 'http://127.0.0.1:8001',
-    }],
+    proxy,
     before(app, server) {
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons
@@ -119,12 +105,6 @@ module.exports = function(proxy, allowedHost) {
       // it used the same host and port.
       // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
       app.use(noopServiceWorkerMiddleware());
-      // apiMocker(app, path.resolve('mock/api.js'), {
-      //   proxy: {
-      //     '/api-mock-rest/*': 'http://sdf.600jit.com:3001/api-mock-rest',
-      //   },
-      //   changeHost: true
-      // });
     },
   };
 };
