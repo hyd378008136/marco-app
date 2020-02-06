@@ -25,6 +25,8 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+// const SentryPlugin = require('@sentry/webpack-plugin')
+const SentryPlugin = require('webpack-sentry-plugin')
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -608,6 +610,22 @@ module.exports = function(webpackEnv) {
           // The formatter is invoked directly in WebpackDevServerUtils during development
           formatter: isEnvProduction ? typescriptFormatter : undefined,
         }),
+      // new SentryPlugin({
+      //   include: './build',
+      //   release: '0.1.0',
+      //   configFile: 'sentry.properties',
+      //   urlPrefix: '~/'
+      // })
+      webpackEnv === 'production' && new SentryPlugin({
+        organization: 'sentry',
+        project: 'marco-app',
+        apiKey: '323cf6cfc0994ac689edf6dcaa361722f787f04723b1411a83c2417e9e2cee88',
+        include: /(\.js\.map | \.js)$/,
+        deleteAfterCompile: false,
+        // Release version name/hash is required
+        release: '0.3.0',
+        baseSentryURL: 'http://122.51.74.87:9000/api/0'
+      })
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

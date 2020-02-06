@@ -1,0 +1,7 @@
+[defaults]
+url = http://122.51.74.87:9000
+org = sentry
+project = marco-app
+
+[auth]
+token = 323cf6cfc0994ac689edf6dcaa361722f787f04723b1411a83c2417e9e2cee88
